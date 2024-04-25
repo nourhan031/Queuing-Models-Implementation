@@ -1,5 +1,6 @@
 # Queuing-Models-Implementation
-Project for Stochastic Modeling Course
+
+<strong>RULES:
 
 <img src="https://github.com/nourhan031/Queuing-Models-Implementation/blob/main/mm1_rules.jpeg" width="400" > 
 <br>
