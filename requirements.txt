@@ -1,0 +1,21 @@
+INPUTS: (all characteristics of the queuing model)
+1. Probabilty distribution of # arrivals (lambda)
+2. prob dist of # service time (Mu)
+3. # servers
+4. system capacity
+5. pop size
+6. queuing discipline (FIFO? FCFS?)
+
+OUPUTS:
+1. type of queuing model related to the system
+2. Mu_k and lambda_k
+3. ALL performance measures: 
+- Utilization rate of each server (% time each servr is busy)(Rho) 
+- Avg WT cust spends in queue (W_q)
+- Avg # cust in system (L)
+- Avg # cust in queue (L_q)
+- Avg WT a cust spends in system (W)
+- Avg # cust in queue (L_q)
+- Service Rate (1/Mu)
+- Prob that all servers are busy (P_w)
+4. P_0 (prob of having no cust in system) and P_k (prob of having k cust in system)
