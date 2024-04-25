@@ -37,6 +37,7 @@ def MM_1(arrival_rate, service_rate):
     # prob of k cust in system
     P_k = [(1 - rho) * rho**k for k in range(11)]
 
+    # ha3mel function feeha el print statements di w neb'a n call it inside kol wahda instead of having to write them every single time
     print(f"Model Type: {model_type}")
     print(f"Lambda_k: {lambda_k}")
     print(f"Mu_k: {mu_k}")
