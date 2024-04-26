@@ -132,7 +132,12 @@ def MM1_k(): # finite storage
     print("MM1k Queuing Model")
 
 def MM1_m(): # finite cutomer population
-    print("MM1m Queuing Moddel")
+    # 1: single server
+    # service time follows an exponential distribution with mean 1/mu
+    # m: total potential customers
+
+
+    print("MM1m Queuing Model")
 
 def main():
     # Get user input for all characteristics of the queuing model
