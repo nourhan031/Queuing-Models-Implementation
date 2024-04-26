@@ -131,13 +131,37 @@ def MM1_k(): # finite storage
 
     print("MM1k Queuing Model")
 
-def MM1_m(): # finite cutomer population
+def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
     # 1: single server
     # service time follows an exponential distribution with mean 1/mu
     # m: total potential customers
 
+    model_type = "M/M/1//m"
+    # M = pop_size
+    # mu_k and lambda_k
+    mu_k = service_rate
+    """
+    if 0 <= k <= pop_size:
+       lambda_k = lambda(pop_size - k)
+       
+    else:
+       lambda_k = 0
+    """
 
-    print("MM1m Queuing Model")
+    # utilization
+
+    # prob of 0 cust in system
+    P_0_denominator = sum(
+        [(arrival_rate / service_rate) ** k * math.factorial(pop_size) / math.factorial(pop_size - k) for
+         k in range(pop_size + 1)])
+    P_0 = 1 / P_0_denominator
+
+    # prob of k cust in system
+    P_k = [(P_0 * (arrival_rate / service_rate) ** k * math.factorial(pop_size) / math.factorial(
+        pop_size - k)) for k in range(pop_size + 1)]
+
+    # avg num of cust in system
+    L = sum([k * P_k[k] for k in range(pop_size + 1)])
 
 def main():
     # Get user input for all characteristics of the queuing model
