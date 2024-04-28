@@ -2,7 +2,7 @@ INPUTS: (all characteristics of the queuing model)
 1. Probabilty distribution of Interarrival time -
 2. Probability distribution of service time
 3. # servers
-4. system capacity
+4. system capacity (queue size)
 5. pop size
 6. queuing discipline (FIFO? FCFS?)
 

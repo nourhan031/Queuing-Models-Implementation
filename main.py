@@ -2,7 +2,7 @@
 import math
 
 # lecture 5
-def MM_1(arrival_rate, service_rate):
+def MM_1(IAT, service_rate):
     # M: Poisson arrival process
     # M: exponential service time distribution
     # 1: one server
@@ -14,6 +14,7 @@ def MM_1(arrival_rate, service_rate):
     # type of queuing model
     model_type = "M/M/1"
 
+    arrival_rate = 1 / IAT
     # mu_k and lambda_k
     mu_k = service_rate
     lambda_k = arrival_rate
@@ -171,11 +172,12 @@ def main():
     arrival_rate = float(input("Enter the probability distribution of IAT: "))
     service_rate = float(input("Enter the probability distribution of service time (mu): "))
     num_servers = int(input("Enter the number of servers: "))
-    system_capacity = int(input("Enter the system capacity: "))
+    system_capacity = int(input("Enter the system capacity (queue size): "))
     pop_size = int(input("Enter the population size: "))
     queue_discipline = input("Enter the queuing discipline (e.g., FIFO, FCFS): ")
 
     if num_servers == 1 and queue_discipline == "FCFS":
+        # check for pop capacity, if finite -> MM1, else: MM1m
         MM_1(arrival_rate, service_rate)
 
     elif num_servers > 1:
