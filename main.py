@@ -8,6 +8,9 @@ def MM_1(arrival_rate, service_rate):
     # 1: one server
     # Discipline: FCFS
 
+    # arrival rate (lambda) = avg # arrivals per hour -> POISSON
+    # lambda = 1/IAT
+    # IAT -> EXPONENTIAL
     # type of queuing model
     model_type = "M/M/1"
 
@@ -165,7 +168,7 @@ def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
 
 def main():
     # Get user input for all characteristics of the queuing model
-    arrival_rate = float(input("Enter the probability distribution of arrivals (lambda): "))
+    arrival_rate = float(input("Enter the probability distribution of IAT: "))
     service_rate = float(input("Enter the probability distribution of service time (mu): "))
     num_servers = int(input("Enter the number of servers: "))
     system_capacity = int(input("Enter the system capacity: "))
