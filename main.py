@@ -16,8 +16,8 @@ def MM_1(IAT, service_rate):
 
     arrival_rate = 1 / IAT
     # mu_k and lambda_k
-    mu_k = service_rate
     lambda_k = arrival_rate
+    mu_k = service_rate
 
     # system utilization
     rho = arrival_rate / service_rate
@@ -59,7 +59,7 @@ def MM_1(IAT, service_rate):
 
 
 # M/M/k
-def MM_k(arrival_rate, service_rate, num_servers):
+def MM_k(IAT, service_rate, num_servers):
     # M: Poisson arrival process
     # M: exponential service time distribution
     # k: number of servers
@@ -67,7 +67,7 @@ def MM_k(arrival_rate, service_rate, num_servers):
 
     # type of queuing model
     model_type = "M/M/k"
-
+    arrival_rate = 1 / IAT
     # arrival rate (lambda) and service rate (mu) are the same for all customers and servers
     mu_k = service_rate
     lambda_k = arrival_rate
@@ -169,19 +169,37 @@ def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
 
 def main():
     # Get user input for all characteristics of the queuing model
-    arrival_rate = float(input("Enter the probability distribution of IAT: "))
+    IAT = float(input("Enter the probability distribution of IAT: "))
     service_rate = float(input("Enter the probability distribution of service time (mu): "))
     num_servers = int(input("Enter the number of servers: "))
     system_capacity = int(input("Enter the system capacity (queue size): "))
     pop_size = int(input("Enter the population size: "))
     queue_discipline = input("Enter the queuing discipline (e.g., FIFO, FCFS): ")
 
-    if num_servers == 1 and queue_discipline == "FCFS":
-        # check for pop capacity, if finite -> MM1, else: MM1m
-        MM_1(arrival_rate, service_rate)
 
-    elif num_servers > 1:
-        MM_k(arrival_rate, service_rate, num_servers)
+    """
+    IAT EXPONENTIAL:
+       Service Time EXPONENTIAL:
+         SINGLE SERVER:
+           FINITE queue length:
+              M/M/1/k
+           ELSE (INFINITE queue length):
+             FINITE customer population:
+               M/M/1//m
+             ELSE (INFINITE customer population):
+               M/M/1
+         ELSE (MORE THAN A SINGLE SERVER):
+             FINITE queue length:
+                M/M/K
+    """
+# metba'y ne3raf el condition bta3 M/M/infinity
+
+    # if num_servers == 1 and queue_discipline == "FCFS":
+    #     # check for pop capacity, if finite -> MM1, else: MM1m
+    #     MM_1(IAT, service_rate)
+    #
+    # elif num_servers > 1:
+    #     MM_k(IAT, service_rate, num_servers)
 
 if __name__ == "__main__":
     main()
