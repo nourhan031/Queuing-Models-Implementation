@@ -6,7 +6,7 @@ Implement the following Queuing Models:
 - M/M/1//m
 
 INPUTS: (all characteristics of the queuing model)
-1. Probabilty distribution of Interarrival time -
+1. Probabilty distribution of Interarrival time
 2. Probability distribution of service time
 3. # servers
 4. system capacity (queue size)
