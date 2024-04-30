@@ -4,86 +4,49 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # lecture 5
-def MM_1(avg_no_arrivals, avg_service_rate, pop_size):
+def MM_1(prob_of_IAT, prob_of_ST, pop_size):
     model_type = "M/M/1"
 
     # generate IAT using exponential distribution
-    inter_arrival_time = list(np.random.exponential(scale=1/avg_no_arrivals, size=pop_size))
+    inter_arrival_time = list(np.random.exponential(scale= prob_of_IAT, size=pop_size))
     # generate random ST for each cust
-    service_time = list(np.random.exponential(scale=1 / avg_service_rate, size=pop_size))
-
-    arrival_time = [0 for i in range(pop_size)]
-    arrival_time[0] = inter_arrival_time[0] # arrival of customer 1
-
-    # generate arrivals
-    for i in range(1, pop_size):
-        arrival_time[i] = (arrival_time[i-1] + inter_arrival_time[i])
+    service_time = list(np.random.exponential(scale= prob_of_ST, size=pop_size))
 
 
-    # arrival_rate = 1 / IAT
-    arrival_rate = [1 / i for i in inter_arrival_time]
+
+    avg_of_IAT = sum(inter_arrival_time)/pop_size
+    arrival_rate = 1 / avg_of_IAT
+
+
+    avg_of_ST = sum(service_time)/pop_size
     # service_rate
-    service_rate = service_time
+    service_rate = 1 / avg_of_ST
 
     # system utilization
-    rho = [i / j for i, j in zip(arrival_rate, service_rate)]
-
+    rho = arrival_rate / service_rate
     # avg wt cust spends in queue
-    # W_q = arrival_rate / (service_rate * (service_rate - arrival_rate))
-    W_q = [i / (j * (j - i)) for i, j in zip(arrival_rate, service_rate)]
+    W_q = arrival_rate / (service_rate * (service_rate - arrival_rate))
 
     # avg num of cust in system
-    # L = arrival_rate / (service_rate - arrival_rate)
-    L = [i / (j - i) for i, j in zip(arrival_rate, service_rate)]
+    L = arrival_rate / (service_rate - arrival_rate)
 
     # avg num of cust in queue
-    # L_q = arrival_rate ** 2 / (service_rate * (service_rate - arrival_rate))
-    L_q = [(i ** 2) / (j * (j - i)) for i, j in zip(arrival_rate, service_rate)]
+    L_q = arrival_rate ** 2 / (service_rate * (service_rate - arrival_rate))
 
     # avg wt a cust spends in system
-    # W = 1 / (service_rate - arrival_rate)
-    W = [1 / (j - i) for i, j in zip(arrival_rate, service_rate)]
+    W = 1 / (service_rate - arrival_rate)
 
     # prob that all servers are busy
-    # P_w = arrival_rate / service_rate
-    P_w = [i / j for i, j in zip(arrival_rate, service_rate)]
+    P_w = arrival_rate / service_rate
 
     # prob of 0 cust in system
-    # P_0 = 1 - P_w
-    P_0 = [1 - i for i in P_w]
+    P_0 = 1 - P_w
 
-    n = int(input("Enter num of customers in system: "))
-    # prob of n cust in system
-    # P_n = (1 - rho) * (rho ** n)
+    n = input("Enter no of customers you want to get probability of: ")
+    P_n = (1 - rho) * (rho ** n)
 
-    if n>100:
-        P_n = 'too many cust?'
-    else:
-        P_n = [(1 - i) * (i ** n) for i in rho]
-
-
-    # df = pd.DataFrame({
-    #     'Model Type': [model_type],
-    #     'Lambda': [arrival_time],
-    #     'Mu': [service_rate],
-    #     'System Utilization (rho)': [rho],
-    #     'Avg WT in queue (W_q)': [W_q],
-    #     'Avg num of customers in system (L)': [L],
-    #     'Avg num of cutomers in queue': [L_q],
-    #     'Prob that all servers are busy': [P_w],
-    #     'Prob of having 0 cust in system': [P_0],
-    #     'Prob of having n customers in system': [P_n]
-    # })
-    #
-    # pd.set_option('display.max_columns', None)
-    # pd.set_option('display.max_rows', None)
-    # pd.set_option('display.expand_frame_repr', False)
-    #
-    # print(df)
-
-    # ha3mel function feeha el print statements di w neb'a n call it inside kol wahda instead of having to write them every single time
     print(f"Model Type: {model_type}")
-    print(f"Lambda: {arrival_time}")
+    print(f"Lambda: {arrival_rate}")
     print(f"Mu: {service_rate}")
     print(f"System utilization (rho): {rho}")
     print(f"Average waiting time in the queue (W_q): {W_q}")
@@ -94,9 +57,8 @@ def MM_1(avg_no_arrivals, avg_service_rate, pop_size):
     print(f"Probability of having no customers in the system (P_0): {P_0}")
     print(f"Probability of having n customers in the system (P_n): {P_n}")
 
-
 # M/M/k
-def MM_k(IAT, service_rate, num_servers):
+def MM_k(prob_of_IAT, prob_of_ST, num_servers, pop_size):
     # M: Poisson arrival process
     # M: exponential service time distribution
     # k: number of servers
@@ -104,10 +66,18 @@ def MM_k(IAT, service_rate, num_servers):
 
     # type of queuing model
     model_type = "M/M/k"
-    arrival_rate = 1 / IAT
-    # arrival rate (lambda) and service rate (mu) are the same for all customers and servers
-    mu_k = service_rate
-    lambda_k = arrival_rate
+    # generate IAT using exponential distribution
+    inter_arrival_time = list(np.random.exponential(scale= prob_of_IAT, size=pop_size))
+    # generate random ST for each cust
+    service_time = list(np.random.exponential(scale= prob_of_ST, size=pop_size))
+
+
+    avg_of_IAT = sum(inter_arrival_time)/pop_size
+    arrival_rate = 1 / avg_of_IAT
+
+    avg_of_ST = sum(service_time)/pop_size
+    # service_rate
+    service_rate = 1 / avg_of_ST
     k = num_servers
 
     # system utilization
@@ -138,22 +108,20 @@ def MM_k(IAT, service_rate, num_servers):
     P_w = (1 / (math.factorial(k))) * (arrival_rate / service_rate) ** k * ((k * service_rate) / ((k * service_rate) - arrival_rate)) * P_0
 
     # Get user input for system capacity
-    system_capacity = int(input("Enter the system capacity: "))
-
-    P_n_list = []
+    n = int(input("Enter the no of customers you want to get probability of: "))
 
     # prob of n cust in system
-    for n in range(0, system_capacity + 1):
-        if n <= k:
-            P_n = (((arrival_rate / service_rate) ** n) / math.factorial(n)) * P_0
-        else:
-            P_n = (((arrival_rate / service_rate) ** n) / (math.factorial(k) * k ** (n - k))) * P_0
 
-        P_n_list.append(P_n)
+    if n <= k:
+        P_n = (((arrival_rate / service_rate) ** n) / math.factorial(n)) * P_0
+    else:
+        P_n = (((arrival_rate / service_rate) ** n) / (math.factorial(k) * k ** (n - k))) * P_0
+
+
 
     print(f"Model Type: {model_type}")
-    print(f"Lambda_k: {lambda_k}")
-    print(f"Mu_k: {mu_k}")
+    print(f"Lambda: {arrival_rate}")
+    print(f"Mu: {service_rate}")
     print(f"System utilization (rho): {rho}")
     print(f"Average waiting time in the queue (W_q): {W_q}")
     print(f"Average number of customers in the system (L): {L}")
@@ -161,7 +129,7 @@ def MM_k(IAT, service_rate, num_servers):
     print(f"Average waiting time in the system (W): {W}")
     print(f"Probability that all servers are busy (P_w): {P_w}")
     print(f"Probability of having no customers in the system (P_0): {P_0}")
-    print(f"Probability of having n customers in the system (P_n): {P_n_list}")
+    print(f"Probability of having n customers in the system (P_n): {P_n}")
 
 # lecture 6
 def MM_infinity(IAT, service_rate, n):
@@ -234,8 +202,8 @@ def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
 
 def main():
     # Get user input for all characteristics of the queuing model
-    avg_no_arrivals = float(input("Enter the avg no. of arrivals per minute: "))
-    avg_service_rate = float(input("Enter the avg number of people served per minute: "))
+    prob_of_IAT = float(input("Enter the probability distribution of interarrival time : "))
+    prob_of_ST = float(input("Enter the probability distribution of service time: "))
     num_servers = int(input("Enter the number of servers: "))
     system_capacity = int(input("Enter the system capacity (queue size): "))
     pop_size = int(input("Enter the population size: "))
@@ -261,10 +229,10 @@ def main():
 
     if num_servers == 1 and queue_discipline == "FCFS":
         # check for pop capacity, if finite -> MM1, else: MM1m
-        MM_1(avg_no_arrivals, avg_service_rate, pop_size)
-    #
-    # elif num_servers > 1:
-    #     MM_k(IAT, service_rate, num_servers)
+        MM_1(prob_of_IAT, prob_of_ST, pop_size)
+
+    elif num_servers > 1 and queue_discipline == "FCFS":
+        MM_k(prob_of_IAT, prob_of_ST, num_servers,pop_size)
 
 if __name__ == "__main__":
     main()
