@@ -12,18 +12,15 @@ def MM_1(prob_of_IAT, prob_of_ST, pop_size):
     # generate random ST for each cust
     service_time = list(np.random.exponential(scale= prob_of_ST, size=pop_size))
 
-
-
     avg_of_IAT = sum(inter_arrival_time)/pop_size
     arrival_rate = 1 / avg_of_IAT
 
-
     avg_of_ST = sum(service_time)/pop_size
-    # service_rate
     service_rate = 1 / avg_of_ST
 
     # system utilization
     rho = arrival_rate / service_rate
+
     # avg wt cust spends in queue
     W_q = arrival_rate / (service_rate * (service_rate - arrival_rate))
 
@@ -59,24 +56,17 @@ def MM_1(prob_of_IAT, prob_of_ST, pop_size):
 
 # M/M/k
 def MM_k(prob_of_IAT, prob_of_ST, num_servers, pop_size):
-    # M: Poisson arrival process
-    # M: exponential service time distribution
-    # k: number of servers
-    # Discipline: FCFS
-
-    # type of queuing model
     model_type = "M/M/k"
+
     # generate IAT using exponential distribution
     inter_arrival_time = list(np.random.exponential(scale= prob_of_IAT, size=pop_size))
     # generate random ST for each cust
     service_time = list(np.random.exponential(scale= prob_of_ST, size=pop_size))
 
-
     avg_of_IAT = sum(inter_arrival_time)/pop_size
     arrival_rate = 1 / avg_of_IAT
 
     avg_of_ST = sum(service_time)/pop_size
-    # service_rate
     service_rate = 1 / avg_of_ST
     k = num_servers
 
@@ -111,13 +101,10 @@ def MM_k(prob_of_IAT, prob_of_ST, num_servers, pop_size):
     n = int(input("Enter the no of customers you want to get probability of: "))
 
     # prob of n cust in system
-
     if n <= k:
         P_n = (((arrival_rate / service_rate) ** n) / math.factorial(n)) * P_0
     else:
         P_n = (((arrival_rate / service_rate) ** n) / (math.factorial(k) * k ** (n - k))) * P_0
-
-
 
     print(f"Model Type: {model_type}")
     print(f"Lambda: {arrival_rate}")
@@ -164,9 +151,67 @@ def MM_infinity(IAT, service_rate, n):
     print("MM-infinity Queuing Model")
 
 # lecture 7
-def MM1_k(): # finite storage
+def MM1_k(prob_of_IAT, prob_of_ST, num_servers, pop_size, system_capacity): # finite system capacity
+    model_type = "M/M/1/k"
 
-    print("MM1k Queuing Model")
+    # generate IAT using exponential distribution
+    inter_arrival_time = list(np.random.exponential(scale=prob_of_IAT, size=pop_size))
+    # generate random ST for each cust
+    service_time = list(np.random.exponential(scale=prob_of_ST, size=pop_size))
+
+    avg_of_IAT = sum(inter_arrival_time) / pop_size
+    # arrival_rate = 1 / avg_of_IAT
+
+    avg_of_ST = sum(service_time) / pop_size
+    service_rate = 1 / avg_of_ST
+
+    k = int(input("Enter the number of customers in the system: "))
+    if k < system_capacity:
+        arrival_rate = 1 / avg_of_IAT
+    else:
+        arrival_rate = 0
+
+    # system utilization
+    rho = arrival_rate / service_rate
+
+    # avg wt cust spends in queue
+    W_q = arrival_rate / (service_rate * (service_rate - arrival_rate))
+
+    # avg wt a cust spends in system
+    W = 1 / (service_rate - arrival_rate)
+
+    # avg num of cust in system
+    L = arrival_rate * W
+
+    # avg num of cust in queue
+    L_q = arrival_rate * W_q
+
+    # prob that all servers are busy
+    P_w = arrival_rate / service_rate
+
+    # prob of 0 cust in system
+    # P_0_denominator = 1 + (sum((arrival_rate / service_rate) ** k) / math.factorial(k))
+    P_0_denominator = 1 + sum(((arrival_rate / service_rate) ** k) / math.factorial(k) for k in range(k-1))
+    P_0 = 1 / P_0_denominator
+
+    # prob of having n customers in the system
+    if 0 <= k < system_capacity:
+        P_n = P_0 * (arrival_rate / service_rate) ** k
+    else:
+        P_n = 0
+
+    print(f"Model Type: {model_type}")
+    print(f"Lambda: {arrival_rate}")
+    print(f"Mu: {service_rate}")
+    print(f"System utilization (rho): {rho}")
+    print(f"Average waiting time in the queue (W_q): {W_q}")
+    print(f"Average number of customers in the system (L): {L}")
+    print(f"Average number of customers in the queue (L_q): {L_q}")
+    print(f"Average waiting time in the system (W): {W}")
+    print(f"Probability that all servers are busy (P_w): {P_w}")
+    print(f"Probability of having no customers in the system (P_0): {P_0}")
+    print(f"Probability of having n customers in the system (P_n): {P_n}")
+
 
 def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
     # 1: single server
@@ -209,6 +254,15 @@ def main():
     pop_size = int(input("Enter the population size: "))
     queue_discipline = input("Enter the queuing discipline (e.g., FIFO, FCFS): ")
 
+    if num_servers == 1 and queue_discipline == "FCFS":
+        # check for pop capacity, if finite -> MM1, else: MM1m
+        MM_1(prob_of_IAT, prob_of_ST, pop_size)
+
+    elif num_servers > 1 and queue_discipline == "FCFS":
+        MM_k(prob_of_IAT, prob_of_ST, num_servers,pop_size)
+
+    elif num_servers == 1 and queue_discipline == "FIFO":
+        MM1_k(prob_of_IAT, prob_of_ST, num_servers, pop_size, system_capacity)
 
     """
     IAT EXPONENTIAL:
@@ -227,12 +281,7 @@ def main():
     """
 # metba'y ne3raf el condition bta3 M/M/infinity
 
-    if num_servers == 1 and queue_discipline == "FCFS":
-        # check for pop capacity, if finite -> MM1, else: MM1m
-        MM_1(prob_of_IAT, prob_of_ST, pop_size)
 
-    elif num_servers > 1 and queue_discipline == "FCFS":
-        MM_k(prob_of_IAT, prob_of_ST, num_servers,pop_size)
 
 if __name__ == "__main__":
     main()

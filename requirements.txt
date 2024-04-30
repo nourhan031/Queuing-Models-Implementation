@@ -1,8 +1,8 @@
 Implement the following Queuing Models:
-- M/M/1
-- M/M/k
+- M/M/1 (done)
+- M/M/k (done)
 - M/M/infinity
-- M/M/1//k
+- M/M/1/k (done)
 - M/M/1//m
 
 INPUTS: (all characteristics of the queuing model)
@@ -15,7 +15,7 @@ INPUTS: (all characteristics of the queuing model)
 
 OUPUTS:
 1. type of queuing model related to the system
-2. Mu_k and lambda_k
+2. Mu and lambda
 3. ALL performance measures: 
 - Utilization rate of each server (% time each servr is busy)(Rho) 
 - Avg WT cust spends in queue (W_q)
