@@ -190,9 +190,9 @@ def MM1_k(prob_of_IAT, prob_of_ST, num_servers, pop_size, system_capacity): # fi
     P_w = arrival_rate / service_rate
 
     # prob of 0 cust in system
-    # P_0_denominator = 1 + (sum((arrival_rate / service_rate) ** k) / math.factorial(k))
-    P_0_denominator = 1 + sum(((arrival_rate / service_rate) ** k) / math.factorial(k) for k in range(k-1))
-    P_0 = 1 / P_0_denominator
+    P_0 = (1 - rho) / (1 - (rho) ** (system_capacity+1))
+    # P_0_denominator = 1 + sum(((arrival_rate / service_rate) ** k) / math.factorial(k) for k in range(k-1))
+    # P_0 = 1 / P_0_denominator
 
     # prob of having n customers in the system
     if 0 <= k < system_capacity:
@@ -213,14 +213,8 @@ def MM1_k(prob_of_IAT, prob_of_ST, num_servers, pop_size, system_capacity): # fi
     print(f"Probability of having n customers in the system (P_n): {P_n}")
 
 
-def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
-    # 1: single server
-    # service time follows an exponential distribution with mean 1/mu
-    # m: total potential customers
-
+def MM1_m(arrival_rate, service_rate, pop_size): # finite customer population
     model_type = "M/M/1//m"
-    # M = pop_size
-    # mu_k and lambda_k
     mu_k = service_rate
     """
     if 0 <= k <= pop_size:
@@ -230,13 +224,27 @@ def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
        lambda_k = 0
     """
 
-    # utilization
+    m = int(input("Enter the number of pop in the system: "))
+    n = int(input("Enter the no of customers you want to get probability of: "))
 
     # prob of 0 cust in system
-    P_0_denominator = sum(
-        [(arrival_rate / service_rate) ** k * math.factorial(pop_size) / math.factorial(pop_size - k) for
-         k in range(pop_size + 1)])
+    P_0_denominator = sum((math.factorial(m) / (math.factorial(m - n))) * ((arrival_rate / service_rate) ** n))
     P_0 = 1 / P_0_denominator
+
+    # system utilization
+    rho = 1 - P_0
+
+    # prob of having n customers in the system
+    P_n = (math.factorial(m) / (math.factorial(m - n))) * ((arrival_rate / service_rate) ** n) * P_0
+
+    # avg num of cust in system
+    L = m - (service_rate / arrival_rate) * (1 - P_0)
+
+    # avg num of cust in queue
+    L_q = m - ((arrival_rate + service_rate) / arrival_rate) * (1 - P_0)
+
+    # prob of waiting in queue
+    W_q = L_q / (arrival_rate * (m - L))
 
     # prob of k cust in system
     P_k = [(P_0 * (arrival_rate / service_rate) ** k * math.factorial(pop_size) / math.factorial(
@@ -244,6 +252,15 @@ def MM1_m(arrival_rate, service_rate, pop_size): # finite cutomer population
 
     # avg num of cust in system
     L = sum([k * P_k[k] for k in range(pop_size + 1)])
+
+    # prob that all servers are busy
+    P_w = 1 - P_0
+
+    # avg WT in queue
+    W_q = L_q / (arrival_rate * (m - L))
+
+    # avg WT in system
+    W = L / (arrival_rate * (m - L))
 
 def main():
     # Get user input for all characteristics of the queuing model
@@ -264,6 +281,10 @@ def main():
     elif num_servers == 1 and queue_discipline == "FIFO":
         MM1_k(prob_of_IAT, prob_of_ST, num_servers, pop_size, system_capacity)
 
+    # elif num_servers == 1 and
+
+
+
     """
     IAT EXPONENTIAL:
        Service Time EXPONENTIAL:
@@ -279,7 +300,6 @@ def main():
              FINITE queue length:
                 M/M/K
     """
-# metba'y ne3raf el condition bta3 M/M/infinity
 
 
 
