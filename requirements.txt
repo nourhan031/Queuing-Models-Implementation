@@ -1,9 +1,9 @@
 Implement the following Queuing Models:
 - M/M/1 (done)
 - M/M/k (done)
-- M/M/infinity
+- M/M/infinity (EL MAIN MSH BT CALL IT EVEN WHEN WE INPUT THE SERVER NUMBER AS INFINITE ?????)
 - M/M/1/k (done)
-- M/M/1//m
+- M/M/1//m (done)
 
 INPUTS: (all characteristics of the queuing model)
 1. Probabilty distribution of Interarrival time
