@@ -17,15 +17,17 @@ def MM_1(prob_of_IAT, prob_of_ST, pop_size):
 
     # system utilization
     rho = arrival_rate / service_rate
-
-    # avg wt cust spends in queue
-    W_q = arrival_rate / (service_rate * (service_rate - arrival_rate))
-
-    # avg num of cust in system
-    L = arrival_rate / (service_rate - arrival_rate)
+    if rho >= 1:
+        rho = 0.9
 
     # avg num of cust in queue
-    L_q = arrival_rate ** 2 / (service_rate * (service_rate - arrival_rate))
+    L_q = rho ** 2 / (1 - rho)
+
+    # avg wt cust spends in queue
+    W_q = L_q / arrival_rate
+
+    # avg num of cust in system
+    L = rho / (1 - rho)
 
     # avg wt a cust spends in system
     W = 1 / (service_rate - arrival_rate)
@@ -34,7 +36,7 @@ def MM_1(prob_of_IAT, prob_of_ST, pop_size):
     P_w = arrival_rate / service_rate
 
     # prob of 0 cust in system
-    P_0 = 1 - P_w
+    P_0 = 1 - rho
 
     # n = int(input("Enter the number of customers for which you want to calculate the probability: "))
     P_n = (1 - rho) * (rho ** n)
@@ -54,8 +56,9 @@ def generate_random_probabilities():
     return prob_of_IAT, prob_of_ST
 
 # Run the simulation 500 times
+num_simulations = 500
 results = []
-for _ in range(500):
+for _ in range(num_simulations):
     prob_of_IAT, prob_of_ST = generate_random_probabilities()
     results.append(MM_1(prob_of_IAT, prob_of_ST, pop_size))
 
@@ -73,10 +76,10 @@ fig.delaxes(axs[2,3])
 
 # Plot histograms for each column
 for ax, column in zip(axs.flatten(), df.columns):
-    ax.hist(df[column], bins=50, color='skyblue', edgecolor='black')
-    # ax.set_title(column)
-    ax.set_xlabel(column)
-    ax.set_ylabel("Frequency")
+    ax.hist(df[column], bins=50, color=np.random.rand(3,), edgecolor='black')
+    ax.set_title(column)
+    # ax.set_xlabel(column)
+    ax.set_ylabel("time")
 
 # Display the plot
 plt.tight_layout()
