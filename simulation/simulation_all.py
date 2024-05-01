@@ -1,7 +1,5 @@
-import pandas as pd
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 
 # lecture 5
 def MM_1(prob_of_IAT, prob_of_ST, pop_size):
