@@ -1,6 +1,6 @@
 # Queuing-Models-Implementation
 
-<strong>RULES:
+## RULES:
 
 <img src="https://github.com/nourhan031/Queuing-Models-Implementation/blob/main/cheatsheets/mm1_rules.jpeg" width="400" > 
 <br>
